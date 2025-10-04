@@ -1,0 +1,27 @@
+version: '3.8'
+
+services:
+  autolav-backend:
+    build: .
+    container_name: autolav-backend
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - PORT=${PORT:-8000}
+      - API_TOKEN=${API_TOKEN}
+      - MAX_CONCURRENCY=${MAX_CONCURRENCY:-4}
+      - NAV_TIMEOUT=${NAV_TIMEOUT:-30}
+      - NAV_DELAY=${NAV_DELAY:-500}
+      - PORTAL_URL=${PORTAL_URL}
+      - UNIT_URL_TEMPLATE=${UNIT_URL_TEMPLATE}
+    volumes:
+      - ./logs:/app/logs
+      - ./reports:/app/reports
+      - ./storage:/app/storage
+    restart: unless-stopped
+    networks:
+      - autolav-network
+
+networks:
+  autolav-network:
+    driver: bridge
